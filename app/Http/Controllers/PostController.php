@@ -22,4 +22,24 @@ class PostController extends Controller
         // 変数$postをposts/show.blade.phpファイルに渡す
         return view('posts.show', compact('post'));
     }
+
+    public function create() {
+        return view('posts.create');
+    } 
+
+     // 投稿保存処理（バリデーション付き）
+    public function store(Request $request)
+    {
+        // バリデーションを実行
+        $validated = $request->validate([
+            'title' => 'required|max:20',
+            'content' => 'required|max:200',
+        ]);
+
+        // データベースに保存
+        Posts::create($validated);
+
+        // 投稿一覧へリダイレクト
+        return redirect('/posts');
+    }
 }
